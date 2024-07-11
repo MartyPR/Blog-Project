@@ -1,7 +1,15 @@
 const asyncHandler = require("express-async-handler");
 
 const postController = {
-  create: asyncHandler(async (req, res) => {}),
+  create: asyncHandler(async (req, res) => {
+    try {
+      res.json({
+        message:"new post"
+      })
+    } catch (error) {
+      
+    }
+  }),
 
   listPosts: asyncHandler(async (req, res) => {}),
 

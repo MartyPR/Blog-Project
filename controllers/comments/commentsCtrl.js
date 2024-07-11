@@ -1,7 +1,15 @@
 const asyncHandler = require("express-async-handler");
 
 const commentController = {
-  create: asyncHandler(async (req, res) => {}),
+  create: asyncHandler(async (req, res) => {
+    try {
+      res.json({
+        message:"new comment"
+      })
+    } catch (error) {
+      
+    }
+  }),
   commentDetail: asyncHandler(async (req, res) => {}),
   delete: asyncHandler(async (req, res) => {}),
   update: asyncHandler(async (req, res) => {}),

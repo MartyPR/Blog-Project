@@ -90,10 +90,25 @@ const userController = {
     }
   }),
 
-  //   profile_photo_up: asyncHandler(async (req, res) => {}),
 
-  //   updatePassword: asyncHandler(async (req, res) => {
+  updatePassword: asyncHandler(async (req, res) => {
+    const { newPassword } = req.body;
+    const user = await User.findById(req?.user);
+    if (!user) {
+      throw new Error("User not found");
+    }
+    const salt = await bcrypt.genSalt(10);
+    const hashedPassword = await bcrypt.hash(newPassword, salt);
+    user.password = hashedPassword;
+    await user.save();
+    res.json({
+      message: "Password changed succesfully ",
+      user: { fullname: user.fullname, email: user.email },
+    });
+  }),
 
-  //   }),
+    //   uploadProfilePhoto: asyncHandler(async (req, res) => {}),
+      //   uploadCoverImg: asyncHandler(async (req, res) => {}),
+        //   updateUser: asyncHandler(async (req, res) => {}),
 };
 module.exports = userController;

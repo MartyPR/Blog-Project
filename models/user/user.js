@@ -17,7 +17,7 @@ const userSchema = new mongoose.Schema(
     profileImage: {
       type: String,
     },
-    converImage: {
+    coverImage: {
       type: String,
     },
     posts: [{ type: mongoose.Schema.Types.ObjectId, ref: "Post" }],
