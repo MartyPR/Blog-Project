@@ -3,7 +3,7 @@ const User = require("../../models/user/user");
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 const appErr = require("../../utils/appErr");
-const cloudinary = require("../../config/cloudinary");
+const { uploadToCloudinary } = require("../../config/cloudinary");
 
 const userController = {
   //!=========== Register function===============
@@ -79,7 +79,10 @@ const userController = {
   //! ===============profile function===============
 
   profile: asyncHandler(async (req, res) => {
-    const user = await User.findById(req?.user).select("-password");
+    const user = await User.findById(req?.user)
+      .select("-password")
+      .populate("posts")
+      .populate("comments")
 
     if (user) {
       res.status(500).json({
@@ -165,10 +168,7 @@ const userController = {
   uploadProfilePhoto: asyncHandler(async (req, res, next) => {
     // console.log(req.file);
     try {
-      const result = await cloudinary.uploader.upload(req.file.path, {
-        folder: "blog-app-v3",
-        transformation: [{ width: 500, height: 500, crop: "limit" }],
-      });
+      const result = await uploadToCloudinary(req.file.path);
 
       const userFound = await User.findById(req?.user);
       userFound.profileImage = result.secure_url;
@@ -181,12 +181,8 @@ const userController = {
   }),
 
   uploadCoverImg: asyncHandler(async (req, res, next) => {
-    console.log(req.file);
     try {
-      const result = await cloudinary.uploader.upload(req.file.path, {
-        folder: "blog-app-v3",
-        transformation: [{ width: 500, height: 500, crop: "limit" }],
-      });
+      const result = await uploadToCloudinary(req.file.path);
 
       const userFound = await User.findById(req?.user);
       userFound.coverImage = result.secure_url;
