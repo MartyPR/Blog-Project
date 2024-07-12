@@ -3,6 +3,7 @@ const User = require("../../models/user/user");
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 const appErr = require("../../utils/appErr");
+const cloudinary = require("../../config/cloudinary");
 
 const userController = {
   //!=========== Register function===============
@@ -161,7 +162,40 @@ const userController = {
     }
   }),
 
-  //   uploadProfilePhoto: asyncHandler(async (req, res) => {}),
-  //   uploadCoverImg: asyncHandler(async (req, res) => {}),
+  uploadProfilePhoto: asyncHandler(async (req, res, next) => {
+    // console.log(req.file);
+    try {
+      const result = await cloudinary.uploader.upload(req.file.path, {
+        folder: "blog-app-v3",
+        transformation: [{ width: 500, height: 500, crop: "limit" }],
+      });
+
+      const userFound = await User.findById(req?.user);
+      userFound.profileImage = result.secure_url;
+      await userFound.save();
+
+      res.json({ success: true, url: result.secure_url });
+    } catch (error) {
+      res.json(next(appErr(error.message)));
+    }
+  }),
+
+  uploadCoverImg: asyncHandler(async (req, res, next) => {
+    console.log(req.file);
+    try {
+      const result = await cloudinary.uploader.upload(req.file.path, {
+        folder: "blog-app-v3",
+        transformation: [{ width: 500, height: 500, crop: "limit" }],
+      });
+
+      const userFound = await User.findById(req?.user);
+      userFound.coverImage = result.secure_url;
+      await userFound.save();
+
+      res.json({ success: true, url: result.secure_url });
+    } catch (error) {
+      res.json(next(appErr(error.message)));
+    }
+  }),
 };
 module.exports = userController;

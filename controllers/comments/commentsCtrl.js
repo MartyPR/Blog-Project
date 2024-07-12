@@ -1,8 +1,13 @@
 const asyncHandler = require("express-async-handler");
+const Post = require("../../models/post/post");
 
 const commentController = {
   create: asyncHandler(async (req, res) => {
+    const{message}=req.body;
     try {
+      //find the post
+      const post= await Post.findById(req.user);
+      //create the comment
       res.json({
         message:"new comment"
       })

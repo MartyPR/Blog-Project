@@ -6,6 +6,7 @@ const postRouter = require("./routes/posts/postRoute");
 const commentRouter = require("./routes/comments/commentRoute");
 const globalErrHandler = require("./middlewares/globalHandler");
 
+
 require("./config/dbConnect");
 const app = express();
 const PORT = process.env.PORT || 9000;
@@ -19,6 +20,6 @@ app.use("/api/v1/post", postRouter);
 app.use("/api/v1/comment", commentRouter);
 
 //!Error handler middlwares
-app.use(globalErrHandler)
+app.use(globalErrHandler);
 //!stat server
 app.listen(PORT, console.log("The server is running on PORT"));
