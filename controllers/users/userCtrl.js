@@ -2,35 +2,35 @@ const asyncHandler = require("express-async-handler");
 const User = require("../../models/user/user");
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
+const appErr = require("../../utils/appErr");
 
 const userController = {
   //!=========== Register function===============
-  register: asyncHandler(async (req, res) => {
+  register: asyncHandler(async (req, res, next) => {
     const { fullname, email, password } = req.body;
     if (!fullname || !email || !password) {
       throw new Error("please all fields  are  required");
     }
     const userExists = await User.findOne({ email });
     if (userExists) {
-      throw new Error("User already exist");
+      //   throw new Error("User already exist");
+      next(appErr("User already exist"));
     }
     //byscripjs to password
     const salt = await bcrypt.genSalt(10);
     const hashedPassword = await bcrypt.hash(password, salt);
 
-    const userCreated = User.create({
+    const userCreated = await User.create({
       fullname,
       email,
       password: hashedPassword,
     });
     console.log(userCreated);
+
     res.json({
       status: true,
       message: "register was successfull",
-      user: {
-        fullname,
-        email,
-      },
+      userCreated,
     });
   }),
 
@@ -78,7 +78,8 @@ const userController = {
   //! ===============profile function===============
 
   profile: asyncHandler(async (req, res) => {
-    const user = await User.findById(req?.user?.id).select("-password");
+    const user = await User.findById(req?.user).select("-password");
+
     if (user) {
       res.status(500).json({
         status: "sucess",
@@ -89,7 +90,6 @@ const userController = {
       throw new Error("User not found");
     }
   }),
-
 
   updatePassword: asyncHandler(async (req, res) => {
     const { newPassword } = req.body;
@@ -107,8 +107,8 @@ const userController = {
     });
   }),
 
-    //   uploadProfilePhoto: asyncHandler(async (req, res) => {}),
-      //   uploadCoverImg: asyncHandler(async (req, res) => {}),
-        //   updateUser: asyncHandler(async (req, res) => {}),
+  //   uploadProfilePhoto: asyncHandler(async (req, res) => {}),
+  //   uploadCoverImg: asyncHandler(async (req, res) => {}),
+  //   updateUser: asyncHandler(async (req, res) => {}),
 };
 module.exports = userController;
