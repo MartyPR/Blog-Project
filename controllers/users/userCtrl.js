@@ -91,24 +91,77 @@ const userController = {
     }
   }),
 
-  updatePassword: asyncHandler(async (req, res) => {
+  updatePassword: asyncHandler(async (req, res, next) => {
     const { newPassword } = req.body;
-    const user = await User.findById(req?.user);
-    if (!user) {
-      throw new Error("User not found");
+    try {
+      const user = await User.findById(req?.user);
+      console.log(user);
+      if (!user) {
+        res.json(next(appErr("User not found")));
+      }
+      const salt = await bcrypt.genSalt(10);
+      const hashedPassword = await bcrypt.hash(newPassword, salt);
+      user.password = hashedPassword;
+      await user.save();
+      res.json({
+        message: "Password has been changed succesfully ",
+        user: { fullname: user.fullname, email: user.email },
+      });
+    } catch (error) {
+      res.json(next(appErr(error.message)));
     }
-    const salt = await bcrypt.genSalt(10);
-    const hashedPassword = await bcrypt.hash(newPassword, salt);
-    user.password = hashedPassword;
-    await user.save();
-    res.json({
-      message: "Password changed succesfully ",
-      user: { fullname: user.fullname, email: user.email },
-    });
+  }),
+
+  userDetail: async (req, res) => {
+    try {
+      console.log(req?.params);
+      const userId = req?.params.id;
+      //finde
+      const user = await User.findById(userId);
+      if (!user) {
+        throw new Error("User not found");
+      }
+      res.json({
+        status: "success",
+        data: user,
+      });
+    } catch (error) {
+      res.json(error);
+    }
+  },
+
+  updateUser: asyncHandler(async (req, res, next) => {
+    const { fullname, email } = req?.body;
+    console.log(email);
+    try {
+      if (email) {
+        const emailTaken = await User.findOne({ email });
+        if (emailTaken) {
+          return next(appErr("Email is taken", 400));
+        }
+      }
+      //update the user
+      const user = await User.findByIdAndUpdate(
+        req.params.id,
+        {
+          fullname,
+          email,
+        },
+        {
+          new: true,
+        }
+      );
+      res.json({
+        status: "success",
+        data: "User update",
+        user,
+      });
+    } catch (error) {
+      res.json(next(appErr(error.message)));
+    }
   }),
 
   //   uploadProfilePhoto: asyncHandler(async (req, res) => {}),
   //   uploadCoverImg: asyncHandler(async (req, res) => {}),
-  //   updateUser: asyncHandler(async (req, res) => {}),
 };
 module.exports = userController;
