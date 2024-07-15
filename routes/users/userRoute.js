@@ -3,11 +3,40 @@ const userController = require("../../controllers/users/userCtrl");
 const isAuthenticated = require("../../middlewares/isAuthenticated");
 const userRouter = express.Router();
 const multer = require("multer");
+
+
+
+
+
 // config multer
 const storage = multer.diskStorage({});
 const upload = multer({
   storage,
 });
+
+//Renderin forms
+
+userRouter.get('/login',(req,res)=>{
+  res.render('users/login')
+})
+
+userRouter.get('/register',(req,res)=>{
+  res.render('users/register')
+})
+
+userRouter.get('/profile',(req,res)=>{
+  res.render('users/profile')
+})
+userRouter.get('/upload-profile-photo-form',(req,res)=>{
+  res.render('users/uploadProfilePhoto')
+})
+
+userRouter.get('/upload-cover-photo-form',(req,res)=>{
+  res.render('users/uploadCoverPhoto')
+})
+userRouter.get('/update-user',(req,res)=>{
+  res.render('users/updateUser')
+})
 
 userRouter.post("/register", userController.register);
 userRouter.post("/login", userController.login);

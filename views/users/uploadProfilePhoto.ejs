@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <script src="https://kit.fontawesome.com/9c0d6208df.js" crossorigin="anonymous"></script>
+    <!-- CSS -->
+    <!-- CSS -->
+    <link rel="stylesheet" href="/public/css/uploadPhoto.css" />
+    <title>Upload Profile Photo</title>
+  </head>
+  <body>
+    <div class="form-container">
+      <!-- icon -->
+      <h1>Upload Profile photo</h1>
+      <p>
+        <!-- upload icon -->
+      </p>
+      <small class="error">
+        <i class="fas fa-exclamation-circle"></i>
+        Invalid Credentials
+      </small>
+      <form action="/login" method="POST">
+        <label for="email">Select Imgae</label>
+        <input type="file" name="image" id="image" />
+        <button type="submit">
+          <i class="fas fa-upload"></i>
+        </button>
+      </form>
+    </div>
+  </body>
+</html>
