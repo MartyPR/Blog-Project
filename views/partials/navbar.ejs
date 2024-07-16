@@ -1,0 +1,33 @@
+<link rel="stylesheet" href="/public/css/style.css" />
+
+<nav>
+  <div>
+    <img src="/public/images/logo.png" alt="logo" />
+  </div>
+  <ul>
+    <li>
+      <a href="/">Home</a>
+    </li>
+    <% if (user) { %>
+      <li>
+        <a href="/api/v1/user/profile">Profile</a>
+      </li>
+      <li>
+        <a href="/">Posts</a>
+      </li>
+      <li>
+        <a href="#" class="create-post-btn">New Post</a>
+      </li>
+      <li>
+        <a href="/api/v1/user/logout">Logout</a>
+      </li>
+    <% } else { %>
+      <li>
+        <a href="/api/v1/user/login">Login</a>
+      </li>
+      <li>
+        <a href="/api/v1/user/register">Register</a>
+      </li>
+    <% } %>
+  </ul>
+</nav>

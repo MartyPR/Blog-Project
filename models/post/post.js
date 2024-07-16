@@ -17,6 +17,7 @@ const postSchema = new mongoose.Schema(
     },
     image: {
       type: String,
+      default:"https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSxW47z7BgHxNKYEE51jG_e7317mlWvs_IOhvzF1XHfFSkKztaY9Jx9gLTcLlQAjI6KOLw&usqp=CAU"
       // required: true,
     },
     user: {

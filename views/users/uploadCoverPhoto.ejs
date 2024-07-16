@@ -11,19 +11,24 @@
     <title>Upload Cover Photo</title>
   </head>
   <body>
+    <%-include('../partials/navbar.ejs') %>
     <div class="form-container">
       <!-- icon -->
       <h1>Upload Cover photo</h1>
       <p>
         <!-- upload icon -->
       </p>
-      <small class="error">
-        <i class="fas fa-exclamation-circle"></i>
-        Invalid Credentials
-      </small>
-      <form action="/login" method="POST">
-        <label for="email">Select Imgae</label>
-        <input type="file" name="image" id="image" />
+
+      <%if(error){%>
+        <small class="error">
+          <i class="fas fa-exclamation-circle"></i>
+          <%=error%>
+        </small>
+      <%}%>
+      
+      <form action="/api/v1/user/cover_img_upload?_method=PUT" method="post" enctype="multipart/form-data">
+        <label for="email">Select Imagen</label>
+        <input type="file" name="cover" />
         <button type="submit">
           <i class="fas fa-upload"></i>
         </button>

@@ -8,9 +8,10 @@
     <script src="https://kit.fontawesome.com/9c0d6208df.js" crossorigin="anonymous"></script>
     <!-- CSS -->
     <link rel="stylesheet" href="/public/css/form.css" />
-    <title>Login</title>
+    <title>Register</title>
   </head>
   <body>
+    <%-include('../partials/navbar.ejs') %>
     <div class="form-container">
       <!-- icon -->
       <h1>
@@ -18,25 +19,32 @@
         <i class="fas fa-user-plus"></i>
       </h1>
 
-      <small class="error">
-        <i class="fas fa-exclamation-circle"></i>
-        Invalid Credentials
-      </small>
-      <form action="/login" method="POST">
+      <%if(error){%>
+        <small class="error">
+          <i class="fas fa-exclamation-circle"></i>
+          <%=error%>
+        </small>
+      <%}%>
+      
+      
+
+      <form action="/api/v1/user/register" method="POST">
         <!-- full name -->
         <label for="name">Full Name</label>
-        <input type="text" name="name" id="name" />
+        <input type="text" name="fullname" />
         <!-- email -->
         <label for="email">Email</label>
-        <input type="email" name="email" id="email" />
+        <input type="email" name="email" />
 
         <label for="password">Password</label>
-        <input type="password" name="password" id="password" />
+        <input type="password" name="password" />
 
         <button type="submit">Register</button>
 
         <p>Already have an account? <a href="/register">Login</a></p>
       </form>
     </div>
+    <%-include('../partials/footer.ejs') %>
   </body>
+
 </html>

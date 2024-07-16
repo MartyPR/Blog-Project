@@ -1,25 +1,20 @@
 const jwt = require("jsonwebtoken");
+const asyncHandler = require("express-async-handler");
+const User = require("../models/user/user");
 
-const isAuthenticated = (req, res, next) => {
-  // console.log(req.headers);
-  const headerObj = req.headers;
-  const token = headerObj?.authorization?.split(" ")[1];
-
-  const verifyToken = jwt.verify(token, "ExpensesKey", (err, decoded) => {
-    if (err) {
-      return false;
-    } else {
-      return decoded;
+const isAuthenticated = asyncHandler(async (req, res, next) => {
+  if (req.cookies.token) {
+    try {
+      const decoded = jwt.verify(req.cookies.token, process.env.JWT_SECRET);
+      req.user = await User.findById(decoded.id).select("-password");
+      return next();
+    } catch (error) {
+      res.clearCookie("token");
+      return res.redirect("/api/v1/user/login");
     }
-  });
-
-  if (verifyToken) {
-    req.user = verifyToken.id;
-    next();
   } else {
-    const err = new Error("Token expired, login again");
-    next(err);
+    return res.redirect("/api/v1/user/login");
   }
-};
+});
 
 module.exports = isAuthenticated;
