@@ -7,6 +7,7 @@ const commentRouter = require("./routes/comments/commentRoute");
 const globalErrHandler = require("./middlewares/globalHandler");
 const methoOverride = require("method-override");
 const isAuthenticated = require("./middlewares/isAuthenticated");
+const Post = require("./models/post/post");
 
 require("./config/dbConnect");
 const app = express();
@@ -38,8 +39,10 @@ app.use((req, res, next) => {
   });
 
 //!render Home
-app.get('/',isAuthenticated,(req,res)=>{
+app.get('/',isAuthenticated,async (req,res)=>{
+  const posts = await Post.find().populate('user');
     res.render('index',{
+      posts,
       user: req.user  
     })
 })
