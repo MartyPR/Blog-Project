@@ -8,6 +8,7 @@ const globalErrHandler = require("./middlewares/globalHandler");
 const methoOverride = require("method-override");
 const isAuthenticated = require("./middlewares/isAuthenticated");
 const Post = require("./models/post/post");
+const { truncatePost } = require("./utils/helper");
 
 require("./config/dbConnect");
 const app = express();
@@ -15,7 +16,9 @@ const PORT = process.env.PORT || 9000;
 
 
 
+//Helpers
 
+app.locals.tuncatePost=truncatePost;
 
 
 //!Middlewares

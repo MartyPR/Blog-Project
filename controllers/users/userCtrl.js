@@ -231,6 +231,7 @@ const userController = {
           error: "file not found",
         });
       }
+      console.log(req.file.path);
       const result = await uploadToCloudinary(req.file.path);
 
       const userFound = await User.findById(req?.user);

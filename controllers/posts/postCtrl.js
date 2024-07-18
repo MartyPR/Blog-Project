@@ -7,15 +7,22 @@ const { uploadToCloudinary } = require("../../config/cloudinary");
 const postController = {
   create: asyncHandler(async (req, res, next) => {
     const { title, description, category, image } = req.body;
+
     try {
-      if (!title || !description || !category || !req.file) {
-        return next(appErr("All fields are required"));
+      if (!title || !description || !category ) {
+        // return next(appErr("All fields are required"));
+        console.log("asd");
+        return res.render("posts/addPost", {
+          error: "All fields are required",
+        });
       }
       //find the user
       const user = await User.findById(req?.user);
-      console.log(user);
+      // console.log(user);
       //add the image,
+      console.log(req?.file?.path);
       const file = await uploadToCloudinary(req?.file?.path);
+      console.log(file.secure_url);
       //create a post
       const post = await Post.create({
         title,
@@ -28,12 +35,12 @@ const postController = {
       user.posts.push(post._id);
       await user.save();
 
-      res.json({
-        status: "success",
-        post: post,
-      });
+      res.redirect("/api/v1/user/profile");
+
     } catch (error) {
-      res.json(next(appErr(error.message)));
+      return res.render("posts/addPost" ,{
+        error: error.message,
+      });
     }
   }),
 
@@ -104,6 +111,7 @@ const postController = {
         return next(appErr("You are not allowes to update this post", 403));
       }
       //cloudinary new file
+
       const file = await uploadToCloudinary(req?.file?.path);
 
       const updatedPost = await Post.findByIdAndUpdate(req.params.id, {
