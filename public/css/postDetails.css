@@ -31,8 +31,9 @@ nav {
 }
 
 nav img {
-  width: 100px;
+  width: 60px;
   margin: 4px;
+  border-radius: 50%;
 }
 
 nav ul {

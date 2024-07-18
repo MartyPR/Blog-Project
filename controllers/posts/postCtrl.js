@@ -72,11 +72,16 @@ const postController = {
   postDetails: asyncHandler(async (req, res, next) => {
     try {
       const id = req.params.id;
-      const post = await Post.findById(id).populate('comments');
-      res.json({
-        status: "success",
+      const post = await Post.findById(id).populate('comments').populate('user');
+      // res.json({
+      //   status: "success",
+      //   post,
+      // });
+      res.render('posts/postDetails',{
+        user:req.user,
         post,
-      });
+        error:""
+      })
     } catch (error) {
       res.json(next(appErr(error.message)));
     }

@@ -22,6 +22,8 @@ postRouter.get("/form-post", isAuthenticated,(req, res) => {
   });
 });
 
+
+
 postRouter.post(
   "/",
   isAuthenticated,
@@ -31,7 +33,7 @@ postRouter.post(
 
 postRouter.get("/", postController.listPosts);
 postRouter.get("/user_post/", isAuthenticated, postController.listPostsUser);
-postRouter.get("/:id", postController.postDetails);
+postRouter.get("/:id",isAuthenticated, postController.postDetails);
 postRouter.delete("/:id", isAuthenticated, postController.delete);
 
 postRouter.put(

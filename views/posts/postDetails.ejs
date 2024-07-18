@@ -16,56 +16,31 @@
       href="https://fonts.googleapis.com/css2?family=Noto+Sans&family=Roboto:wght@400;500&display=swap"
       rel="stylesheet"
     />
-    <link rel="stylesheet" href="./postDetails.css" />
+    <link rel="stylesheet" href="/public/css/postDetails.css" />
     <title>Responsive design</title>
   </head>
   <body>
     <!-- nav -->
-    <nav>
-      <div>
-        <img src="./images/logo.png" alt="logo" />
-      </div>
-
-      <ul>
-        <li>
-          <a href="#">Home</a>
-        </li>
-        <li>
-          <a href="#">Posts</a>
-        </li>
-        <li>
-          <a href="#">Login</a>
-        </li>
-        <li>
-          <a href="#">Register</a>
-        </li>
-        <li>
-          <a href="#" class="create-post-btn">New Post</a>
-        </li>
-      </ul>
-    </nav>
+    <%-include('../partials/navbar.ejs') %> 
     <!-- content -->
     <section class="container-flex">
       <!-- main -->
-      <main>
-        <article class="post-content">
-          <img src="./images/post3.jpg" alt="" class="post-image" />
+      <main  class="post-details">
+        <article class="post-details-content">
+          <img src="<%=post?.image%>" alt="" class="post-image" />
           <p class="post-info">
             <span class="post-author">
               <i class="fas fa-user"></i>
-              <a href="#">John Doe</a>
+              <a href="#"><%=post?.user.fullname%></a>
             </span>
             <span class="post-date">
               <i class="far fa-calendar-alt"></i>
-              <time datetime="2020-01-01">January 1, 2020</time>
+              <time datetime="2020-01-01"><%=post?.createdAt.toLocaleDateString()%></time>
             </span>
           </p>
-          <h1 class="post-title">Become a Web Developer</h1>
+          <h1 class="post-title"><%=post?.title %></h1>
           <p class="post-body">
-            Lorem ipsum dolor, sit amet consectetur adipisicing elit. Officia
-            itaque inventore culpa placeat! Cum nam optio, labore, voluptas sunt
-            quam rem cupiditate laboriosam amet reiciendis velit doloribus eum!
-            Repudiandae, odio?
+            <%=post?.description%>
           </p>
         </article>
         <!-- Comment form -->
@@ -148,15 +123,12 @@
       <aside class="sidebar">
         <div class="about-me">
           <h2>About The Author</h2>
-          <img class="avatar" src="./images/pic2.jpg" alt="" />
+          <img class="avatar" src="<%=post?.user.profileImage%>" alt="" />
 
-          <h2 class="about-name">Emmanuel</h2>
-          <small>FullStack Web Developer</small>
+          <h2 class="about-name"><%=post?.user.fullname%></h2>
+          <small><%=post?.user.role%></small>
           <p class="about-me-bio">
-            Lorem ipsum dolor, sit amet consectetur adipisicing elit. Nostrum
-            adipisci eligendi nobis itaque ex? Veniam tempore itaque cumque
-            fugiat iusto voluptatibus odit inventore dolorem numquam maxime,
-            repellendus labore corrupti expedita?
+            <%=post?.user.bio%>
           </p>
         </div>
 
