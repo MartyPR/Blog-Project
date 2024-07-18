@@ -4,10 +4,11 @@
     <img src="/public/images/logo.png" alt="logo" />
   </div>
   <ul>
-    <li>
-      <a href="/">Home</a>
-    </li>
+
     <% if (user) { %>
+      <li>
+        <a href="/home">Home</a>
+      </li>
       <li>
         <a href="/api/v1/user/profile">Profile</a>
       </li>
@@ -21,6 +22,9 @@
         <a href="/api/v1/user/logout">Logout</a>
       </li>
     <% } else { %>
+      <li>
+        <a href="/">Home</a>
+      </li>
       <li>
         <a href="/api/v1/user/login">Login</a>
       </li>

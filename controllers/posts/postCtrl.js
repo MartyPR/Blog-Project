@@ -3,6 +3,7 @@ const Post = require("../../models/post/post");
 const User = require("../../models/user/user");
 const appErr = require("../../utils/appErr");
 const { uploadToCloudinary } = require("../../config/cloudinary");
+const Comment = require("../../models/comment/comment");
 
 const postController = {
   create: asyncHandler(async (req, res, next) => {
@@ -72,7 +73,9 @@ const postController = {
   postDetails: asyncHandler(async (req, res, next) => {
     try {
       const id = req.params.id;
-      const post = await Post.findById(id).populate('comments').populate('user');
+      const post = await Post.findById(id).populate('comments').populate('user');   
+      const comments = await Promise.all(post.comments.map((res) => Comment.findById(res.id).populate('user')));
+      console.log(comments);
       // res.json({
       //   status: "success",
       //   post,
@@ -80,6 +83,7 @@ const postController = {
       res.render('posts/postDetails',{
         user:req.user,
         post,
+        comments,
         error:""
       })
     } catch (error) {

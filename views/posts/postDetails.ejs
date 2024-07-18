@@ -5,10 +5,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <!-- Fontawesome -->
-    <script
-      src="https://kit.fontawesome.com/42a182743f.js"
-      crossorigin="anonymous"
-    ></script>
+    <script src="https://kit.fontawesome.com/9c0d6208df.js" crossorigin="anonymous"></script>
     <!-- Google font -->
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -38,6 +35,18 @@
               <time datetime="2020-01-01"><%=post?.createdAt.toLocaleDateString()%></time>
             </span>
           </p>
+
+          <% if(post.user.id === user.id){%>
+          <div class="comment-actions">
+            <a href="#" class="comment-update">
+              <i class="fas fa-edit"></i>
+            </a>
+            <a href="#" class="comment-delete">
+              <i class="fas fa-trash-alt"></i>
+            </a>
+          </div>
+          <% } %>
+
           <h1 class="post-title"><%=post?.title %></h1>
           <p class="post-body">
             <%=post?.description%>
@@ -56,67 +65,48 @@
 
         <!-- comments -->
         <div class="comments">
+          
           <h2>Comments</h2>
-          <div class="comment">
-            <div class="comment-info">
-              <img
-                src="./images/logo.png"
-                alt=""
-                class="comment-author-image"
-              />
-              <div class="comment-author">
-                <h4>John Doe</h4>
-                <span>January 1, 2020</span>
+
+          <%if(user?.posts.length<=0){%>
+            <h1>You have no post</h1>
+            <%}else{%>
+          <% comments.map(function(result){ %>
+            <div class="comment">
+              <div class="comment-info">
+                <img
+                  src="<%=result.user.profileImage %>"
+                  alt=""
+                  class="comment-author-image"
+                />
+                <div class="comment-author">
+                  <h4><%=result.user.fullname%></h4>
+                  <span><%=result.createdAt.toLocaleDateString()%></span>
+                </div>
+              </div>
+              <div class="comment-body">
+                <p>
+                  <%=result.message%>
+                </p>
+                <!-- delete/update icon -->
+                <% if(post.user.id === user.id){%>
+                  <div class="comment-actions">
+                    <a href="#" class="comment-update">
+                      <i class="fas fa-edit"></i>
+                    </a>
+                    <a href="#" class="comment-delete">
+                      <i class="fas fa-trash-alt"></i>
+                    </a>
+                  </div>
+                  <% } %>
               </div>
             </div>
-            <div class="comment-body">
-              <p>
-                Lorem ipsum dolor sit amet consectetur adipisicing elit. Quis
-                quod, voluptatum, quia, voluptas quas voluptates quibusdam
-                voluptatibus quae quidem quos nesciunt. Quisquam, quae
-                voluptatibus. Quisquam, quae voluptatibus.
-              </p>
-              <!-- delete/update icon -->
-              <div class="comment-actions">
-                <a href="#" class="comment-update">
-                  <i class="fas fa-edit"></i>
-                </a>
-                <a href="#" class="comment-delete">
-                  <i class="fas fa-trash-alt"></i>
-                </a>
-              </div>
-            </div>
-          </div>
-          <div class="comment">
-            <div class="comment-info">
-              <img
-                src="./images/post1.jpg"
-                alt=""
-                class="comment-author-image"
-              />
-              <div class="comment-author">
-                <h4>John Doe</h4>
-                <span>January 1, 2020</span>
-              </div>
-            </div>
-            <div class="comment-body">
-              <p>
-                Lorem ipsum dolor sit amet consectetur adipisicing elit. Quis
-                quod, voluptatum, quia, voluptas quas voluptates quibusdam
-                voluptatibus quae quidem quos nesciunt. Quisquam, quae
-                voluptatibus. Quisquam, quae voluptatibus.
-              </p>
-              <!-- delete/update icon -->
-              <div class="comment-actions">
-                <a href="#" class="comment-update">
-                  <i class="fas fa-edit"></i>
-                </a>
-                <a href="#" class="comment-delete">
-                  <i class="fas fa-trash-alt"></i>
-                </a>
-              </div>
-            </div>
-          </div>
+          <%  }); %>
+
+          <%}%>
+
+
+  
         </div>
       </main>
       <!-- aside -->

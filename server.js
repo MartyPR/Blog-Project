@@ -42,12 +42,26 @@ app.use((req, res, next) => {
   });
 
 //!render Home
-app.get('/',isAuthenticated,async (req,res)=>{
+app.get('/',async (req,res)=>{
   const posts = await Post.find().populate('user');
+  
     res.render('index',{
       posts,
-      user: req.user  
+     
     })
+    
+})
+
+//render home with user
+app.get('/home', isAuthenticated,async (req,res)=>{
+  const posts = await Post.find().populate('user');
+  
+    res.render('index',{
+      posts,
+      user:req.user
+     
+    })
+    
 })
 
 

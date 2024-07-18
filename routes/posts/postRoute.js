@@ -12,28 +12,22 @@ const upload = multer({
 
 const postRouter = express.Router();
 
-
-// form 
-
-postRouter.get("/form-post", isAuthenticated,(req, res) => {
+// form
+postRouter.get("/form-post", isAuthenticated, (req, res) => {
   res.render("posts/addPost", {
     user: req.user,
     error: "",
   });
 });
-
-
-
 postRouter.post(
   "/",
   isAuthenticated,
   upload.single("file"),
   postController.create
 );
-
 postRouter.get("/", postController.listPosts);
 postRouter.get("/user_post/", isAuthenticated, postController.listPostsUser);
-postRouter.get("/:id",isAuthenticated, postController.postDetails);
+postRouter.get("/:id", isAuthenticated, postController.postDetails);
 postRouter.delete("/:id", isAuthenticated, postController.delete);
 
 postRouter.put(

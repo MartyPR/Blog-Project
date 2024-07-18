@@ -81,7 +81,7 @@ header {
 }
 
 .header-content h1 {
-  font-size: 5rem;
+  font-size: 2.3rem;
   padding: 10px;
   margin-top: 20px;
   color: #14213d;
@@ -246,4 +246,11 @@ footer .socials a {
   aside {
     width: 30%;
   }
+  .header-content h1 {
+    font-size: 5rem;
+    padding: 10px;
+    margin-top: 20px;
+    color: #14213d;
+  }
+  
 }
