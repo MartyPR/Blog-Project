@@ -75,7 +75,7 @@ const postController = {
       const id = req.params.id;
       const post = await Post.findById(id).populate('comments').populate('user');   
       const comments = await Promise.all(post.comments.map((res) => Comment.findById(res.id).populate('user')));
-      console.log(comments);
+      // console.log(comments);
       // res.json({
       //   status: "success",
       //   post,
@@ -94,19 +94,19 @@ const postController = {
   delete: asyncHandler(async (req, res, next) => {
     try {
       const post = await Post.findById(req.params.id);
+      console.log(post);
+      console.log(req.user.id);
       //check if the post belong to the user
 
-      if (post.user.toString() !== req.user) {
+      if (post.user.toString() !== req.user.id) {
         return next(appErr("You are not allowes to delete this post", 403));
       }
       const deteledPost = await Post.findByIdAndDelete(req.params.id);
-      res.json({
-        status: "success",
-        message: "Post has been deleted suceess",
-        deteledPost,
-      });
+      res.redirect("/api/v1/user/profile");
     } catch (error) {
       res.json(next(appErr(error.message)));
+
+      //! crear una alerta en caso de no tener acceso o otro problema
     }
   }),
 

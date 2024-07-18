@@ -217,6 +217,16 @@ aside {
   color: #ff5a5f;
   margin-right: 10px;
 }
+.post-actions {
+  text-decoration: none;
+  color: #ff5a5f;
+  font-size: 1.2rem;
+  width: 30px;
+  height: 30px;
+  border: none;
+  margin-right: 10px;
+  cursor: pointer;
+}
 /* Footer */
 footer {
   width: 100%;

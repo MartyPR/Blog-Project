@@ -41,9 +41,13 @@
             <a href="#" class="comment-update">
               <i class="fas fa-edit"></i>
             </a>
-            <a href="#" class="comment-delete">
-              <i class="fas fa-trash-alt"></i>
-            </a>
+            <form action="/api/v1/post/<%=post?._id%>?_method=DELETE" method="POST">
+              
+              <button class="post-actions">
+                <i class="fas fa-trash-alt"></i>
+              </button>
+            </form>
+
           </div>
           <% } %>
 
@@ -89,7 +93,8 @@
                   <%=result.message%>
                 </p>
                 <!-- delete/update icon -->
-                <% if(post.user.id === user.id){%>
+                <% if(result.user.id === user.id){%>
+                  <% console.log(`${post.user.id}-----${user.id}`)%>
                   <div class="comment-actions">
                     <a href="#" class="comment-update">
                       <i class="fas fa-edit"></i>
