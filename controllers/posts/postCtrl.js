@@ -10,7 +10,7 @@ const postController = {
     const { title, description, category, image } = req.body;
 
     try {
-      if (!title || !description || !category ) {
+      if (!title || !description || !category) {
         // return next(appErr("All fields are required"));
         console.log("asd");
         return res.render("posts/addPost", {
@@ -21,9 +21,9 @@ const postController = {
       const user = await User.findById(req?.user);
       // console.log(user);
       //add the image,
-      console.log(req?.file?.path);
+   
       const file = await uploadToCloudinary(req?.file?.path);
-      console.log(file.secure_url);
+   
       //create a post
       const post = await Post.create({
         title,
@@ -37,9 +37,8 @@ const postController = {
       await user.save();
 
       res.redirect("/api/v1/user/profile");
-
     } catch (error) {
-      return res.render("posts/addPost" ,{
+      return res.render("posts/addPost", {
         error: error.message,
       });
     }
@@ -47,7 +46,7 @@ const postController = {
 
   listPosts: asyncHandler(async (req, res) => {
     try {
-      const posts = await Post.find().populate('comments');
+      const posts = await Post.find().populate("comments");
       res.json({
         status: "success",
         data: posts,
@@ -60,7 +59,7 @@ const postController = {
     try {
       const user = req?.user;
 
-      const posts = await Post.find({ user }).populate('comments');
+      const posts = await Post.find({ user }).populate("comments");
       res.json({
         status: "success",
         data: posts,
@@ -73,19 +72,23 @@ const postController = {
   postDetails: asyncHandler(async (req, res, next) => {
     try {
       const id = req.params.id;
-      const post = await Post.findById(id).populate('comments').populate('user');   
-      const comments = await Promise.all(post.comments.map((res) => Comment.findById(res.id).populate('user')));
+      const post = await Post.findById(id)
+        .populate("comments")
+        .populate("user");
+      const comments = await Promise.all(
+        post.comments.map((res) => Comment.findById(res.id).populate("user"))
+      );
       // console.log(comments);
       // res.json({
       //   status: "success",
       //   post,
       // });
-      res.render('posts/postDetails',{
-        user:req.user,
+      res.render("posts/postDetails", {
+        user: req.user,
         post,
         comments,
-        error:""
-      })
+        error: "",
+      });
     } catch (error) {
       res.json(next(appErr(error.message)));
     }
@@ -111,34 +114,67 @@ const postController = {
   }),
 
   update: asyncHandler(async (req, res, next) => {
-    const { title, description, category } = req.body;
+    const { title, description, category,image } = req.body;
+    console.log(req.body);
     try {
-   
+      if (!title || !description || !category) {
+       
+        return res.render("posts/updatePost", {
+          error: "All fields are required",
+        });
+      }
+
+
       const post = await Post.findById(req.params.id);
       //check if the post belog to the user
-      if (post.user.toString() !== req.user) {
-        return next(appErr("You are not allowes to update this post", 403));
+      if (post.user.toString() !== req.user.id) {
+        return res.render("posts/updatePost", {
+          error: "you can't change this Post "  ,
+        });
       }
       //cloudinary new file
 
       const file = await uploadToCloudinary(req?.file?.path);
 
-      const updatedPost = await Post.findByIdAndUpdate(req.params.id, {
-        title,
-        description,
-        category,
-        image: file.secure_url,
-      },{
-        new:true,
-      });
+      //check if user is updating image
+      if (req.file) {
+        const updatedPost = await Post.findByIdAndUpdate(
+          req.params.id,
+          {
+            title,
+            description,
+            category,
+            image: file.secure_url,
+          },
+          {
+            new: true,
+          }
+        );
+      }else{
+        const updatedPost = await Post.findByIdAndUpdate(
+          req.params.id,
+          {
+            title,
+            description,
+            category,
+          },
+          {
+            new: true,
+          }
+        );
+      }
 
-      res.json({
-        status:"success",
-        data:"Post updated",
-        updatedPost
-      })
+
+      // res.json({
+      //   status:"success",
+      //   data:"Post updated",
+      //   updatedPost
+      // })
+      res.redirect("/api/v1/user/profile");
     } catch (error) {
-      res.json(next(appErr(error.message)));
+      return res.render("posts/updatePost", {
+        error: error.message,
+      });
     }
   }),
 };

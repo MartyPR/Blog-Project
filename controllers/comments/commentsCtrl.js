@@ -14,6 +14,7 @@ const commentController = {
       const comment = await Comment.create({
         user: req.user,
         message,
+        post:post._id
       });
       post.comments.push(comment._id);
       //find the user
@@ -24,37 +25,44 @@ const commentController = {
       await post.save({ validateBeforeSave: false });
       await user.save({ validateBeforeSave: false });
 
-      res.json({
-        message: "success",
-        data: comment,
-      });
+      res.redirect(`/api/v1/post/${req.params.id}`);
     } catch (error) {
       next(appErr(error.message));
     }
   }),
   commentDetail: asyncHandler(async (req, res, next) => {
     try {
+
       const comment = await Comment.findById(req.params.id);
-      res.json({
-        status: "success",
+      res.render("comments/updateComment", {
         comment,
+        error: "",
       });
+      // res.json({
+      //   status: "success",
+      //   comment,
+      // });
     } catch (error) {
-      next(appErr(error.message));
+      const comment = await Comment.findById(req.params.id);
+      res.render("comments/updateComment", {
+        comment,
+        error: error.message,
+      });
     }
   }),
   delete: asyncHandler(async (req, res, next) => {
     try {
       const comment = await Comment.findById(req.params.id);
-      if (comment.user.toString() !== req.user) {
+      if (comment.user.toString() !== req.user.id) {
         return next(appErr("You are not allowes to delete this comment", 403));
       }
       const deletedComment = await Comment.findByIdAndDelete(req.params.id);
-      res.json({
-        status: "success",
-        message: "Comment has been deleted suceess",
-        deletedComment,
-      });
+      // res.json({
+      //   status: "success",
+      //   message: "Comment has been deleted suceess",
+      //   deletedComment,
+      // });
+      res.redirect(`/api/v1/post/${req.query.postId}`);
     } catch (error) {
       next(appErr(error.message));
     }
@@ -62,19 +70,23 @@ const commentController = {
   update: asyncHandler(async (req, res, next) => {
     const { message } = req.body;
     try {
-      const comment = await Comment.findById(req.params.id);
-      if (comment.user.toString() !== req.user) {
-        return next(appErr("You are not allowes to update this comment", 403));
+      const comment = await Comment.findById(req.params.id).populate('post');
+      if (comment.user.toString() !== req.user.id) {
+        res.render("comments/updateComment", {
+          comment,
+          error: "Yo cant change this comment",
+        });
       }
 
       const updatedComment = await Comment.findByIdAndUpdate(req.params.id, {
         message,
       });
-      res.json({
-        status: "success",
-        message:"Comment has been updated",
-        updatedComment,
-      });
+      // res.json({
+      //   status: "success",
+      //   message: "Comment has been updated",
+      //   updatedComment,
+      // });
+      res.redirect(`/api/v1/post/${req.query.postId}`);
     } catch (error) {
       next(appErr(error.message));
     }

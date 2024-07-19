@@ -68,7 +68,7 @@ app.get('/home', isAuthenticated,async (req,res)=>{
 //!Routes
 app.use("/api/v1/user", userRouter);
 app.use("/api/v1/post", postRouter);
-// app.use("/api/v1/comment", commentRouter);
+app.use("/api/v1/comment", commentRouter);
 
 //!Error handler middlwares
 app.use(globalErrHandler);
